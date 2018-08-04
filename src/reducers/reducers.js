@@ -26,7 +26,7 @@ import {
     HANDLE_COMMENT_DIALOG_CHANGE,
     OPEN_EDIT_COMMENT_DIALOG
  } from '../actions';
-
+      
 
 /**
  * CATEGORIES
@@ -40,74 +40,72 @@ export function categories (state = [], action) {
     }
 }
 
-const initialCategoriesState = {
-    currentCategory: null,
-    categories: []
-}
-
 /**
  * COMMENTS
  */
 
 export function comments(state = {}, action) {
     switch (action.type) {
-        case 'FETCH_COMMENTS_SUCCESS':
+        case FETCH_COMMENTS_SUCCESS:
             return {
                 ...state, 
-                comments:action.payload
+                [action.id]: action.comments
               }                           
-        case 'CREATE_COMMENT':
-          let existingComments = state[action.comment.parentId] || [];
-          return {
-               ...state,
-              [action.comment.parentId]: existingComments.concat(action.comment)
+     
+        case UP_VOTE_COMMENT:
+        case DOWN_VOTE_COMMENT:
+        case EDIT_COMMENT:
+        let  existingComments = state[action.comment.parentId] || [];
+              return {
+                  ...state,
+                  [action.comment.parentId]: existingComments
+                      .filter(comment => comment.id !== action.comment.id)
+                      .concat(action.comment)
+                      .sort((a, b) => {
+                          return a.timestamp - b.timestamp;
+                      })
               }
-        case 'UP_VOTE_COMMENT':
-        case 'DOWN_VOTE_COMMENT':
-        case 'EDIT_COMMENT':
-                  existingComments = state[action.comment.parentId] || [];
-                  return {
-                      ...state,
-                      [action.comment.parentId]: existingComments
-                          .filter(comment => comment.id !== action.comment.id)
-                          .concat(action.comment)
-                          .sort((a, b) => {
-                              return a.timestamp - b.timestamp;
-                          })
-                  }
-        case 'DELETE_COMMENT':
-                  existingComments = state[action.postId] || []
-                  return {
-                      ...state,
-                      [action.postId]: existingComments
-                    }
+
+        case DELETE_COMMENT:
+              existingComments = state[action.postId] || []
+              return {
+                  ...state,
+                  [action.postId]: existingComments
+                      .filter(comment => comment.id !== action.id)
+              }
                     default:
                         return state;
-        case 'OPEN_COMMENT_DIALOG':
+        case OPEN_COMMENT_DIALOG:
             return {
                 ...state,
-                isOpen: true
+                openCommentDialog: true
             }
-        case 'OPEN_EDIT_COMMENT_DIALOG':
+        case CREATE_COMMENT:
+             existingComments = state[action.comment.parentId] || [];
+            return {
+                ...state,
+                [action.comment.parentId]: existingComments.concat(action.comment)
+            }
+        case OPEN_EDIT_COMMENT_DIALOG:
             const {body, author, id} = action.comment
             return {
                 ...state,
-                isEdit: true,
-                isOpen: true,
+                edition : true,
+                openCommentDialog: true,
                 body, author, id
             }
-        case 'CLOSE_COMMENT_DIALOG':
-        case 'CREATE_COMMENT':
-        case 'EDIT_COMMENT':
+        case CLOSE_COMMENT_DIALOG:
+        case EDIT_COMMENT:
+        case CREATE_COMMENT:
             return {
                 ...state,
-                isOpen: false,
-                isEdit: false,
+                openCommentDialog: false,
+                idition: false,
                 id: undefined,
                 body: undefined,
                 author: undefined
             }
-        case 'HANDLE_COMMENT_DIALOG_CHANGE':
+        case HANDLE_COMMENT_DIALOG_CHANGE:
             return {
                 ...state,
                 [action.source]: action.value

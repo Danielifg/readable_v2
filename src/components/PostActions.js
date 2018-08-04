@@ -4,12 +4,8 @@ import { Link } from 'react-router-dom';
 import { connect } from 'react-redux';
 import {
     deleteExistingPost,
-    handlePostDialogChange,
-    createNewPost,
-    editExistingPost,
     upVotePost,
     downVotePost,
-    fetchPosts,
     openPostDialog,
     openEditPostDialog
 } from '../actions';
@@ -18,18 +14,21 @@ import {
 class PostActions extends Component{
   
  render(){    
-  const { id,title,category,
+  const { id,category,
           openEditPostDialog,deleteExistingPost,
-          downVotePost,upVotePost ,selectedPost} = this.props
- return(                  
+          downVotePost,upVotePost ,selectedPost, params} = this.props
+ if(!params){
+   return(                  
       <div>
          <Button onClick={() => openEditPostDialog(selectedPost)}>Edit</Button>
          <Button onClick={() => deleteExistingPost(id)}> Delete </Button>
          <Button onClick={() => downVotePost(id)}> Vote Down </Button>
-         <Button onClick={() => upVotePost(id)}> Vote Down </Button>
+         <Button onClick={() => upVotePost(id)}> Vote Up </Button>
          <Button> <Link to={`/${category}/${id}`}> Open Post Details</Link></Button>
       </div>
-   )
+        )
+    }
+   return null;
  }
 }
 
@@ -45,7 +44,7 @@ function mapDispatchToProps (dispatch) {
           upVotePost:(id) => dispatch(upVotePost(id)),
           downVotePost:(id) => dispatch(downVotePost(id)),
           openPostDialog:() => dispatch(openPostDialog()),
-          openEditPostDialog:() => dispatch(openEditPostDialog())
+          openEditPostDialog:(id) => dispatch(openEditPostDialog(id))
    }
 }
 

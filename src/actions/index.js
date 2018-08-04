@@ -31,8 +31,6 @@ const fetchCategories = () => dispatch =>(
  const LOAD_POSTS = 'LOAD_POSTS';
  const SELECT_CATEGORY = 'SELECT_CATEGORY';
  const DELETE_POST ='DELETE_POST';
- const GET_POST ='GET_POST';
- const VOTE_POST ='VOTE_POST';
  const CREATE_POST ='CREATE_POST';
  const EDIT_POST ='EDIT_POST';
  const SORT_POSTS_BY_UP_VOTES='SORT_POSTS_BY_UP_VOTES';
@@ -63,6 +61,7 @@ const handlePostDialogChange = ({source, value}) => ({
 });
 
 const openEditPostDialog = (post) => ({
+    
     type: OPEN_EDIT_POST_DIALOG,
     post
 });
@@ -93,7 +92,7 @@ const fetchPosts = () => dispatch => (
   }))
 }
 
-//********************************** */
+//************ CREATE ********************** */
 
  const createNewPost = (post) => dispatch => (
     createPost(post)
@@ -103,6 +102,13 @@ const fetchPosts = () => dispatch => (
         }))
 );
 
+const createNewComment = (comment) => dispatch => (
+    createComment(comment)
+        .then(newComment => dispatch({
+            type: CREATE_COMMENT,
+            comment: newComment
+        }))
+);
 //********************************** */
 
  const editExistingPost = ({id, title, body}) => dispatch => (
@@ -119,20 +125,6 @@ const fetchPostDetails = (postId, category) => dispatch => (
             type: SELECT_POST,
             post,
             category        
-        }))
-);
- const upVotePost = (id) => dispatch => (
-    votePost(id, "upVote")
-        .then(post => dispatch({
-            type: UP_VOTE_POST,
-            post
-        }))
-);
- const downVotePost = (id) => dispatch => (
-    votePost(id, "downVote")
-        .then(post => dispatch({
-            type: DOWN_VOTE_POST,
-            post
         }))
 );
 
@@ -166,7 +158,8 @@ const fetchCommentsByPostId = (id) => dispatch => (
     getCommentsByPostId(id)
          .then((comments) => dispatch({
             type:FETCH_COMMENTS_SUCCESS,
-            payload:comments
+            id,
+            comments
         }))
    );
 
@@ -189,13 +182,6 @@ const openEditCommentDialog = (comment) => ({
     comment
 })
 
-const createNewComment = (comment) => dispatch => (
-       createComment(comment)
-           .then(newComment => dispatch({
-               type: CREATE_COMMENT,
-               comment: newComment
-           }))
-   );
 const deleteExistingComment = (id, postId) => dispatch => (
        deleteComment(id)
            .then(() => dispatch({
@@ -225,6 +211,20 @@ const downVoteComment = (id) => dispatch => (
         .then(comment => dispatch({
             type: DOWN_VOTE_COMMENT,
             comment
+        }))
+);
+const upVotePost = (id) => dispatch => (
+    votePost(id, "upVote")
+        .then(post => dispatch({
+            type: UP_VOTE_POST,
+            post
+        }))
+);
+ const downVotePost = (id) => dispatch => (
+    votePost(id, "downVote")
+        .then(post => dispatch({
+            type: DOWN_VOTE_POST,
+            post
         }))
 );
 

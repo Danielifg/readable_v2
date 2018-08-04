@@ -49,15 +49,19 @@ export const createPost = (post) =>
 //********************************** */        
 
 export const editPost = ({id, title, body}) =>
-  fetch(`${api}/posts/${id}`, {
-      method: 'PUT',
-        headers,
+ 
+    fetch(`${api}/posts/${id}`, {
+        method: 'PUT',
+        headers: {
+            ...headers,
+            'Content-Type': 'application/json'
+        },
         body: JSON.stringify({
             title,
             body,
             timestamp: Date.now()
-          })
-   }).then(res => res.json())
+        })
+    }).then(res => res.json(),console.log(id,title,body))
 
 export const deletePost = (id) =>
    fetch(`${api}/posts/${id}`, {
@@ -122,10 +126,26 @@ fetch(`${api}/parentId`, {
 export const createComment = (comment) =>
     fetch(`${api}/comments`, {
         method: 'POST',
-        headers,
+        headers: {
+            ...headers,
+            'Content-Type': 'application/json'
+        },
         body: JSON.stringify({
             ...comment,
             id: uuid(),
+            timestamp: Date.now()
+        })
+    }).then(res => res.json())
+
+export const editComment = (id, body) =>
+    fetch(`${api}/comments/${id}`, {
+        method: 'PUT',
+        headers: {
+            ...headers,
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+            body,
             timestamp: Date.now()
         })
     }).then(res => res.json())
@@ -152,18 +172,8 @@ fetch(`${api}/${post}`, {
  })
 }).then(res => res.json())
 
-export const editComment = (id, body) =>
-   fetch(`${api}/comments/${id}`, {
-       method: 'PUT',
-       headers,
-       body: JSON.stringify({
-           body,
-           timestamp: Date.now()
-       })
-   }).then(res => res.json())
-
 export const deleteComment = (id) =>
-   fetch(`${api}/comments/${id}`, {
-       method: 'DELETE',
-       headers
-   })
+    fetch(`${api}/comments/${id}`, {
+        method: 'DELETE',
+        headers
+    })

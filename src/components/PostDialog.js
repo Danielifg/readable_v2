@@ -6,16 +6,12 @@ import Grid from '@material-ui/core/Grid';
 import Dialog from '@material-ui/core/Dialog';
 import DialogActions from '@material-ui/core/DialogActions';
 import DialogContent from '@material-ui/core/DialogContent';
-import DialogContentText from '@material-ui/core/DialogContentText';
 import DialogTitle from '@material-ui/core/DialogTitle';
 import {createNewPost,
         editExistingPost,
         closePostDialog,handlePostDialogChange} from '../actions'
 
 class PostDialog extends Component{
-    constructor(props){
-        super(props)
-    }
     render(){
         const { handlePostDialogChange,openPostDialog } = this.props
         const { id, title, body, owner, category, edition } = this.props.post
@@ -25,22 +21,22 @@ class PostDialog extends Component{
             open={openPostDialog}
             onClose={this.props.closePostDialog}
             aria-labelledby="form-dialog-title">
-            <DialogTitle>NEW</DialogTitle>
+            <DialogTitle>{edition?category:'New Post'}</DialogTitle>
             <DialogContent>
                 <TextField
                     id='Title'
                     required autoFocus fullWidth                       
                     onChange={(event) => handlePostDialogChange("title", event.target.value)}
                     label="Title"
-                    defaultValue='title'
+                    defaultValue={title}
                     margin="normal"/>
 
                 <TextField
                     tid='Body'
-                    required multiline fullWidth                        
+                    required multiline                         
                     onChange={(event) => handlePostDialogChange("body", event.target.value)}                    
                     label="body"
-                    defaultValue="body"
+                    defaultValue={body}
                     margin="normal"
                     fullWidth />
                     
@@ -50,12 +46,14 @@ class PostDialog extends Component{
                             id = 'author'
                             required = {true}                                
                             onChange = {(event) => handlePostDialogChange("owner", event.target.value)}
-                            label = "author"
+                            label = {owner}
                             defaultValue = {owner}
                             margin = "normal"/>
                     </Grid>
                     <Grid item>
                         <TextField
+                        
+                        defaultValue={category}
                              id='category'                                                             
                              onChange={(event) => handlePostDialogChange("category", event.target.value)}
                             label="Category"                                
@@ -74,7 +72,7 @@ class PostDialog extends Component{
                     onClick={() => {
                          edition ? 
                          this.props.editExistingPost(id, title, body):  
-                         this.props.createNewPost({title, body, category, owner})
+                        this.props.createNewPost({title, body, category, author: owner})
                          }}>
                         SAVE
                 </Button>
@@ -96,14 +94,12 @@ function mapStateToProps(state){
 
 function mapDispatchToProps(dispatch){
     return{
-        createNewPost:(title,body,category,author) => dispatch(createNewPost(title,body,category,author)),
-        editExistingPost:(id,title,body) => dispatch(editExistingPost(id,title,body)),
+        createNewPost: (post) => dispatch(createNewPost(post)),
+        editExistingPost:(id,title,body) => dispatch(editExistingPost({id,title,body})),
         closePostDialog:() => dispatch(closePostDialog()),
         handlePostDialogChange: (source, value) => dispatch(handlePostDialogChange({source, value}))
         
     }
 }
 
-export default connect
-(mapStateToProps,mapDispatchToProps)
-(PostDialog)
+export default connect(mapStateToProps,mapDispatchToProps)(PostDialog)

@@ -4,22 +4,19 @@ import Button from '@material-ui/core/Button';
 import TimeAgo from 'time-ago';
 import PostCard from './PostCard'
 import { fetchPosts,openPostDialog,sortPostsByTime,sortPostByDownVotes,sortPostByUpVotes } from '../actions';
-import AddIcon from '@material-ui/icons/Add';
+import DialogEntryBtn from './DialogEntryBtn'
 
 
-class PostSection extends Component{
-  constructor(props){
-      super(props)
-
-  }
- 
+class PostSection extends Component{ 
   componentDidMount = () => {
      this.props.fetchPosts();
   }
 
     render(){
         const timeAgo = TimeAgo();
-        const { classes, posts, sortPostByUpVotes,sortPostByDownVotes, sortPostsByTime} = this.props;
+        const { classes, posts, sortPostByUpVotes,
+                sortPostByDownVotes, sortPostsByTime,
+                openPostDialog} = this.props;
         
          if(posts.posts){
              return(
@@ -32,17 +29,9 @@ class PostSection extends Component{
                      {posts.posts.map((i,index) => (                    
                             <PostCard key ={index} post={i} timeAgo={timeAgo} classes={classes}/>               
                     ))} 
-
-          <Button
-                fab
-                style={fabStyle}
-                color="primary"
-                aria-label="add"
-                onClick={this.props.openPostDialog}>
-                <AddIcon style={{fontSize: 70, color:'white',
-                                 backgroundColor:'#D3D3D3',
-                                borderRadius:50}}/>
-            </Button>
+                    <DialogEntryBtn 
+                            openPostDialog={openPostDialog} 
+                            openCommentDialog={null}/>
        </div>
              )      
          }
@@ -50,14 +39,7 @@ class PostSection extends Component{
     }
 }
 
-const fabStyle = {
-    margin: 0,
-    top: 'auto',
-    right: 20,
-    bottom: 20,
-    left: 'auto',
-    position: 'fixed'
-};
+
 
 function mapStateToProps (posts){
     return{

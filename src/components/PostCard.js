@@ -1,21 +1,20 @@
     import { withStyles } from '@material-ui/core/styles';
-    import React, { Component } from 'react';
-    import { compose } from 'recompose'
+    import React from 'react';
     import Card from '@material-ui/core/Card';
     import CardActions from '@material-ui/core/CardActions';
     import CardContent from '@material-ui/core/CardContent';
-    import Button from '@material-ui/core/Button';
     import Typography from '@material-ui/core/Typography';
     import TimeAgo from 'time-ago';
     import PostActions from './PostActions'
 
-const PostCard = ({  post , classes }) => {
+const PostCard = ({  post , classes, params }) => {
 
        const timeAgo = TimeAgo();
        const capitalizeFirst = (String) =>{
         return String.charAt(0).toUpperCase()+String.slice(1);
     } 
 
+   
     return(
     <div>
         <Card style={{padding:10}} className={classes.card}>
@@ -30,6 +29,9 @@ const PostCard = ({  post , classes }) => {
         <h2>
             {post.title}
         </h2>
+        <h4>
+            {post.body}
+        </h4>
     
         <Typography className={classes.title} color="textSecondary">
                       {`${post.author} posted ${timeAgo.ago(post.timestamp)}`}
@@ -37,8 +39,10 @@ const PostCard = ({  post , classes }) => {
         </CardContent>
        
         <CardActions>
-                   <PostActions selectedPost={post} id={post.id} title={post.title} 
-                                category={post.category}/> 
+                   <PostActions selectedPost={post} id={post.id} 
+                                title={post.title} 
+                                category={post.category} 
+                                params={params}/> 
         </CardActions>
     </Card><br/>
     

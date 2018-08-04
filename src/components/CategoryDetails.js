@@ -1,21 +1,19 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import { fetchPostsByCategory } from '../actions'
+import { fetchPostsByCategory,openPostDialog } from '../actions'
 import CategoryCard from './CategoryCard'
 import PostCard from './PostCard'
+import PostDialog from './PostDialog'         
+import DialogEntryBtn from './DialogEntryBtn'               
 
 class CategoryDetails extends Component{
-    constructor(props){
-        super(props)
-    }
-
     componentDidMount(){
         console.log(this.props.match.params.category)
         this.props.fetchPostsByCategory(this.props.match.params.category)
     }
 
     render(){
-        const {classes,posts} = this.props
+        const {classes,posts,openPostDialog} = this.props
         return(
             <div>
                 <CategoryCard category={this.props.match.params.category}
@@ -23,10 +21,14 @@ class CategoryDetails extends Component{
 
                 {posts.posts?posts.posts.map((i,index)=>{
                     return(<PostCard key={index} post={i}/>)
-                }):null}                               
+                }):null}       
+                  <DialogEntryBtn 
+                  openCommentDialog={null} 
+                  openPostDialog={openPostDialog}/>
+
+                <PostDialog/>
                 </div>
         )
-        const { category } = this.props.match.params
     }
 }
 function mapStateToProps(state){
@@ -37,7 +39,8 @@ function mapStateToProps(state){
 }
 function mapDispatchToProps(dispatch){
     return{
-        fetchPostsByCategory:(id) => dispatch(fetchPostsByCategory(id))
+        fetchPostsByCategory:(id) => dispatch(fetchPostsByCategory(id)),
+        openPostDialog:() => dispatch(openPostDialog())
     }
 }
 export default connect(mapStateToProps,mapDispatchToProps)(CategoryDetails)

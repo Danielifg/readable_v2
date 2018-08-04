@@ -1,23 +1,14 @@
 import React, { Component } from 'react';
-import { fetchCategories,
-    openPostDialog,
-    fetchPosts } from '../actions'
+import { fetchCategories} from '../actions'
 import { connect } from 'react-redux';
 import { Link } from 'react-router-dom';
-import CategoryCard from './CategoryCard'
-import PropTypes from 'prop-types';
 import { withStyles } from '@material-ui/core/styles';
 import Paper from '@material-ui/core/Paper';
 import { compose } from 'recompose'
 import Grid from '@material-ui/core/Grid';
-import Button from '@material-ui/core/Button'
+
 
 class CategorySection extends Component{
-    constructor(props){
-        super(props)
-    }
-   
-
   componentDidMount() {
      this.props.fetchCategories();
   }
