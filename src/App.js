@@ -1,21 +1,33 @@
 import React, { Component } from 'react';
-import logo from './logo.svg';
-import './App.css';
+import { Route, Link, withRouter } from "react-router-dom";
+import CategorySection from  './components/CategorySection'
+import PostSection from  './components/PostSection'
+import PostDetails from './components/PostDetails'
+import CategoryDetails from './components/CategoryDetails'
+import PostDialog from './components/PostDialog'
+
+
 
 class App extends Component {
   render() {
     return (
-      <div className="App">
-        <header className="App-header">
-          <img src={logo} className="App-logo" alt="logo" />
-          <h1 className="App-title">Welcome to React</h1>
-        </header>
-        <p className="App-intro">
-          To get started, edit <code>src/App.js</code> and save to reload.
-        </p>
-      </div>
-    );
+      <div style={{padding:20, backgroundColor:'#f6f3f3'}}>
+      <Route exact path="/" render={() => (
+          <div>         
+              <CategorySection/>         
+             <br/>
+               <PostSection/>
+
+               <PostDialog/>
+           </div>
+        )}/>
+         
+         <Route exact path="/:category" component={CategoryDetails}/> 
+         <Route exact path="/:category/:id" component={PostDetails}/> 
+      
+          </div>
+      );
   }
 }
 
-export default App;
+export default withRouter(App);

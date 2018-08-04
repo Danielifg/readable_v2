@@ -18,11 +18,11 @@ import {
 * CATEGORIES
 */
 const LOAD_CATEGORIES = 'LOAD_CATEGORIES';
-const fetchCategories = (category) => dispatch =>(
+const fetchCategories = () => dispatch =>(
     getAllCategories()
-    .then(categories => dispatch({
-      type: LOAD_CATEGORIES,
-      categories
+        .then(categories => dispatch({
+         type: LOAD_CATEGORIES,
+         categories:categories
     }))
 );
 /**
@@ -43,6 +43,10 @@ const fetchCategories = (category) => dispatch =>(
  const CLOSE_POST_DIALOG = 'CLOSE_POST_DIALOG';
  const HANDLE_POST_DIALOG_CHANGE = 'HANDLE_POST_DIALOG_CHANGE';
  const OPEN_EDIT_POST_DIALOG = 'OPEN_EDIT_POST_DIALOG';
+
+ const UP_VOTE_POST = 'UP_VOTE_POST';
+ const DOWN_VOTE_POST = 'DOWN_VOTE_POST';
+
 
 const openPostDialog = () => ({
     type: OPEN_POST_DIALOG
@@ -65,10 +69,10 @@ const openEditPostDialog = (post) => ({
 
 const fetchPosts = () => dispatch => (
     getAllPosts()
-        .then(posts => dispatch({
+        .then(posts => dispatch({            
             type: LOAD_POSTS,
-            posts
-        })
+            posts        
+        }),      
     )
 )
 
@@ -89,6 +93,8 @@ const fetchPosts = () => dispatch => (
   }))
 }
 
+//********************************** */
+
  const createNewPost = (post) => dispatch => (
     createPost(post)
         .then(newPost => dispatch({
@@ -96,6 +102,8 @@ const fetchPosts = () => dispatch => (
             newPost
         }))
 );
+
+//********************************** */
 
  const editExistingPost = ({id, title, body}) => dispatch => (
     editPost({id, title, body})
@@ -110,23 +118,24 @@ const fetchPostDetails = (postId, category) => dispatch => (
         .then(post => dispatch({
             type: SELECT_POST,
             post,
-            category
+            category        
         }))
 );
-const upVotePost = (id) => dispatch => (
+ const upVotePost = (id) => dispatch => (
     votePost(id, "upVote")
         .then(post => dispatch({
             type: UP_VOTE_POST,
             post
         }))
 );
-const downVotePost = (id) => dispatch => (
+ const downVotePost = (id) => dispatch => (
     votePost(id, "downVote")
         .then(post => dispatch({
             type: DOWN_VOTE_POST,
             post
         }))
 );
+
  const sortPostByUpVotes = () => ({
     type: SORT_POSTS_BY_UP_VOTES
 });
@@ -150,12 +159,13 @@ const downVotePost = (id) => dispatch => (
  const CLOSE_COMMENT_DIALOG = 'CLOSE_COMMENT_DIALOG';
  const HANDLE_COMMENT_DIALOG_CHANGE = 'HANDLE_COMMENT_DIALOG_CHANGE';
  const OPEN_EDIT_COMMENT_DIALOG = 'OPEN_EDIT_COMMENT_DIALOG';
+ const UP_VOTE_COMMENT = 'UP_VOTE_COMMENT';
+ const DOWN_VOTE_COMMENT = 'DOWN_VOTE_COMMENT';
 
 const fetchCommentsByPostId = (id) => dispatch => (
     getCommentsByPostId(id)
          .then((comments) => dispatch({
             type:FETCH_COMMENTS_SUCCESS,
-            isFetching: false,
             payload:comments
         }))
    );
@@ -201,13 +211,15 @@ const editExistingComment = (id, body) => dispatch => (
                comment
            }))
    );
-const upVoteComment = (id) => dispatch => (
+   
+ const upVoteComment = (id) => dispatch => (
     voteComment(id, "upVote")
         .then(comment => dispatch({
             type: UP_VOTE_COMMENT,
             comment
         }))
 );
+
 const downVoteComment = (id) => dispatch => (
     voteComment(id, "downVote")
         .then(comment => dispatch({
@@ -215,7 +227,6 @@ const downVoteComment = (id) => dispatch => (
             comment
         }))
 );
-
 
 export {
     LOAD_POSTS,
@@ -228,15 +239,13 @@ export {
     DOWN_VOTE_COMMENT,
     LOAD_CATEGORIES,
     SELECT_CATEGORY,
-    FETCH_COMMENTS_ACTIVE,
-    FETCH_COMMENTS_SUCCESS,
-    FETCH_COMMENTS_FAILURE,
     CREATE_COMMENT,
     DELETE_COMMENT,
     EDIT_COMMENT,
     SORT_POSTS_BY_UP_VOTES,
     SORT_POSTS_BY_DOWN_VOTES,
     SORT_POSTS_BY_TIME,
+    FETCH_COMMENTS_SUCCESS,
     SELECT_POST,
     fetchPostDetails,
     fetchCategories,
@@ -264,7 +273,6 @@ export {
     CLOSE_COMMENT_DIALOG,
     HANDLE_COMMENT_DIALOG_CHANGE,
     OPEN_EDIT_COMMENT_DIALOG,
-    CLOSE_SNACKBAR,
     openPostDialog,
     closePostDialog,
     handlePostDialogChange,
@@ -272,7 +280,6 @@ export {
     openCommentDialog,
     closeCommentDialog,
     handleCommentDialogChange,
-    openEditCommentDialog,
-    closeSnackbar
+    openEditCommentDialog
   }
   
